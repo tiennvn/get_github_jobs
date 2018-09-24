@@ -9,13 +9,12 @@ jobs_url = 'https://github.com/awesome-jobs/vietnam/issues?page='
 
 def get_jobs():
     result = []
-    for page in range(1,12):
+    for page in range(1, 12):
         html_data = requests.get(jobs_url + str(page)).text
         soup = BeautifulSoup(html_data, 'html.parser')
-        jobs_page = soup.find_all('div', attrs={'class': 'float-left col-9 lh-condensed p-2'})
+        jobs_page = soup.find_all('div', attrs={
+            'class': 'float-left col-9 lh-condensed p-2'})
         for job in jobs_page:
-            # add job info to list result
-            # [job name, job url, create time
             result.append((job.find('a').string.strip(),
                            base_url + job.find('a')['href'],
                            job.find('relative-time').string))
@@ -35,8 +34,6 @@ def create_jobs_db(jobs):
 
 def main():
     jobs = get_jobs()
-    # for job in jobs:
-    #     print(job)
     create_jobs_db(jobs)
     print('Done, open file jobs.db')
 
